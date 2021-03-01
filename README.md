@@ -25,7 +25,10 @@ spoon.MiroWindowsManager:bindHotkeys({
   right = {hyper, "right"},
   down = {hyper, "down"},
   left = {hyper, "left"},
-  fullscreen = {hyper, "f"}
+  fullscreen = {hyper, "f"},
+  gather = {hyper, "g"},
+  cycle = {hyper, "c"}
+
 })
 ```
 
@@ -70,7 +73,17 @@ These are useful in case the window is in one of the corners.
 
 Note that in case the window is resized to be a half of the screen, you can also use `hyper` + `up` + `down` (or `hyper` + `right` + `left`) to resize the window full screen.
 
-As the other shortcuts, `hyper` + `f` can be pressed multiple times to obtain a centered window of three fourth and one half of height and width. This behaviour can be customized.
+As the other shortcuts, `hyper` + `f` can be pressed multiple times to obtain a centered window of three fourth, one half, and one third of height and width. This behaviour can be customized.
+
+### Gather all application windows behind current window
+
+- `hyper` + `g`: gather all windows of the current application to be behind the currently-focused window of that application
+
+### Cycle the current window through different screens
+
+- `hyper` + `c`: cycle the current window to the different screens available
+
+The window maintains the same relative location on each screen cycled to.
 
 ## Animations
 
