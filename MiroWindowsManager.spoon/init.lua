@@ -131,6 +131,33 @@ function obj:_fullDimension(dim)
   end
 end
 
+function obj:_gather()
+  if hs.window.focusedWindow() then
+    local win = hs.window.frontmostWindow()
+---    local id = win:id()
+    local screen = win:screen()
+    local cell = hs.grid.get(win, screen)
+
+    local app = win:application()
+    local winlist = app:allWindows()
+    if app then
+      for _, otherwin in ipairs(winlist) do
+        hs.grid.set(otherwin, cell, screen)
+      end
+    end
+  end
+end
+
+function obj:_cycle()
+  -- get the focused window
+  local win = hs.window.focusedWindow()
+  -- get the screen where the focused window is displayed, a.k.a. current screen
+  local screen = win:screen()
+  -- compute the unitRect of the focused window relative to the current screen
+  -- and move the window to the next screen setting the same unitRect 
+  win:move(win:frame():toUnitRect(screen:frame()), screen:next(), true, 0)
+end
+
 --- MiroWindowsManager:bindHotkeys()
 --- Method
 --- Binds hotkeys for Miro's Windows Manager
@@ -141,6 +168,8 @@ end
 ---   * down: for the down action (usually {hyper, "down"})
 ---   * left: for the left action (usually {hyper, "left"})
 ---   * fullscreen: for the full-screen action (e.g. {hyper, "f"})
+---   * gather: gather all windows of the current focused application behind the currently focused window (e.g. {hyper, "g"})
+---   * cycle: cycle the current focused window through the available screens (e.g. {hyper, "c"})
 ---
 --- A configuration example can be:
 --- ```
@@ -150,7 +179,9 @@ end
 ---   right = {hyper, "right"},
 ---   down = {hyper, "down"},
 ---   left = {hyper, "left"},
----   fullscreen = {hyper, "f"}
+---   fullscreen = {hyper, "f"},
+---   gather = {hyper, "g"},
+---   cycle = {hyper, "c"}
 --- })
 --- ```
 function obj:bindHotkeys(mapping)
@@ -215,6 +246,14 @@ function obj:bindHotkeys(mapping)
 
   hs.hotkey.bind(mapping.fullscreen[1], mapping.fullscreen[2], function ()
     self:_nextFullScreenStep()
+  end)
+
+  hs.hotkey.bind(mapping.gather[1], mapping.gather[2], function ()
+    self:_gather()
+  end)
+
+  hs.hotkey.bind(mapping.cycle[1], mapping.cycle[2], function ()
+    self:_cycle()
   end)
 
 end
